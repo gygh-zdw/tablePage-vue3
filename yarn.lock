@@ -5869,6 +5869,17 @@ table@^6.0.9:
     string-width "^4.2.3"
     strip-ansi "^6.0.1"
 
+tablepage-vue3@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/tablepage-vue3/-/tablepage-vue3-0.1.0.tgz#5e92712bcbb954794f6592cda0c35fe608aba416"
+  integrity sha512-16erO8VQRMNpU9v+xOlWcO5MG6V3tbDFrLT3XJAYg92S18BUAzXWjODMWD5RgZO9+X1Igx4smlCufrUvmzGWgg==
+  dependencies:
+    core-js "^3.8.3"
+    element-plus "2.2.16"
+    sass-loader "^14.1.1"
+    vue "^3.2.13"
+    vue-router "4.1.5"
+
 tapable@^2.0.0, tapable@^2.1.1, tapable@^2.2.0, tapable@^2.2.1:
   version "2.2.1"
   resolved "https://registry.npmjs.org/tapable/-/tapable-2.2.1.tgz"

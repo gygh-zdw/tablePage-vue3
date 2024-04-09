@@ -1,6 +1,6 @@
 {
   "name": "tablepage-vue3",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": false,
   "author": "mr_zhu_dw",
   "keywords": [
@@ -22,6 +22,7 @@
     "core-js": "^3.8.3",
     "element-plus": "2.2.16",
     "sass-loader": "^14.1.1",
+    "tablepage-vue3": "^0.1.0",
     "vue": "^3.2.13",
     "vue-router": "4.1.5"
   },
