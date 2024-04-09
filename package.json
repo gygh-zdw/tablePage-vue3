@@ -49,6 +49,13 @@
     },
     "rules": {}
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gygh-zdw/tablePage-vue3.git"
+  },
+  "bugs": {
+    "url": "https://github.com/gygh-zdw/tablePage-vue3/issues"
+  },
   "browserslist": [
     "> 1%",
     "last 2 versions",
