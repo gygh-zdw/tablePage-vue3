@@ -14,55 +14,13 @@ npm i tablepage-vue3
   <table-page :searchConfig="searchConfig" :tableApi="getMessageList">
     <template #default>
       <el-table-column type="index" label="序号" align="center" width="90" />
-      <el-table-column
-        prop="recieveUserName"
-        label="接收人姓名"
-        align="center"
-        min-width="90"
-        show-overflow-tooltip
-      />
-      <el-table-column
-        prop="recieveUserPhone"
-        label="接收人电话"
-        align="center"
-        min-width="90"
-        show-overflow-tooltip
-      />
-      <el-table-column
-        prop="content"
-        label="内容"
-        align="center"
-        min-width="90"
-        show-overflow-tooltip
-      />
-      <el-table-column
-        prop="createTime"
-        label="提交时间"
-        align="center"
-        min-width="90"
-        show-overflow-tooltip
-      />
-      <el-table-column
-        prop="sendTime"
-        label="发送时间"
-        align="center"
-        min-width="90"
-        show-overflow-tooltip
-      />
-      <el-table-column
-        prop="recieveTime"
-        label="送达时间"
-        align="center"
-        min-width="90"
-        show-overflow-tooltip
-      />
-      <el-table-column
-        prop="recieveStatusVal"
-        label="送达状态"
-        align="center"
-        min-width="90"
-        show-overflow-tooltip
-      />
+      <el-table-column prop="recieveUserName" label="接收人姓名" align="center" min-width="90" show-overflow-tooltip />
+      <el-table-column prop="recieveUserPhone" label="接收人电话" align="center" min-width="90" show-overflow-tooltip />
+      <el-table-column prop="content" label="内容" align="center" min-width="90" show-overflow-tooltip />
+      <el-table-column prop="createTime" label="提交时间" align="center" min-width="90" show-overflow-tooltip />
+      <el-table-column prop="sendTime" label="发送时间" align="center" min-width="90" show-overflow-tooltip />
+      <el-table-column prop="recieveTime" label="送达时间" align="center" min-width="90" show-overflow-tooltip />
+      <el-table-column prop="recieveStatusVal" label="送达状态" align="center" min-width="90" show-overflow-tooltip />
     </template>
   </table-page>
 </template>
