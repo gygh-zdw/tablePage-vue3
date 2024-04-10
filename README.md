@@ -1,3 +1,9 @@
+# 地址
+
+github：https://github.com/gygh-zdw/tablePage-vue3
+npm: https://www.npmjs.com/package/tablepage-vue3
+CSDN: https://blog.csdn.net/weixin_44599143/article/details/137580980
+
 # 引入
 
 ```javascript
