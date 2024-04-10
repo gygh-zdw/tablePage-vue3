@@ -1,13 +1,12 @@
 <template>
   <TablePage
     title="测试文件"
-    noSearchModel
     tableHeight="40vh"
     :table-api="tableApi"
     :searchConfig="searchConfig"
     isButtonLine
     :tableColumnList="tableColumnList"
-    :tableTransition="tableTransition"
+    :tableFileter="tableTransition"
     :props="props"
   >
     <!-- <template #tableShow>

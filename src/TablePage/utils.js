@@ -18,7 +18,7 @@ export function getBind(configItem, isTm) {
   }
   return { ...defBindData, ...bindData }
 }
-function getComponentName(name = 'input') {
+export function getComponentName(name = 'input') {
   const nameStr = name || 'input'
   const nameSplitList = nameStr.split('-').map(str => str.charAt(0).toUpperCase() + str.slice(1))
   if (nameSplitList[0] !== 'El' && nameSplitList[0].slice(0, 2) !== 'El') {

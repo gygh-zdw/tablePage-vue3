@@ -3,7 +3,7 @@
     <div v-if="!noTitle" class="TablePage-title">
       {{ props.title || routeTitle }}
     </div>
-    <el-form inline v-if="!props.noTableTopModel">
+    <el-form inline v-if="!props.noSearchModel">
       <selfForm
         :searchConfigList="props.searchConfig"
         v-model:queryParams="inputQueryParams"
@@ -69,7 +69,7 @@
 
 <script setup>
 import { ref, reactive, watch, onMounted, computed, toRaw } from 'vue'
-import { getSlotList } from './utils'
+import { getSlotList, getComponentName } from './utils'
 import Pagination from './Pagination.vue'
 import selfColumn from './selfColumn.js'
 import selfForm from './selfForm.js'
@@ -82,10 +82,10 @@ const routeTitle = ref(title)
 // eslint-disable-next-line no-undef
 const props = defineProps({
   title: String, // 标题
+  noTitle: Boolean, // 无标题标识
   noPage: Boolean, // 不分页标识
   noMountedGetData: Boolean, //onMounted 不获取数据标识
   loading: Boolean, // loading
-  noTitle: Boolean, // 无标题标识
   noSearchModel: Boolean, // 无表单搜索标识
   changeToSearch: Boolean, // 表单change事件是否触发搜索
   tableHeight: {
@@ -113,8 +113,8 @@ const props = defineProps({
     type: Function,
     default: () => {},
   },
-  tableTransition: {
-    // 重置触发
+  tableFileter: {
+    // 表格过滤函数
     type: Function,
     default: (list) => list,
   },
@@ -135,8 +135,8 @@ const props = defineProps({
   },
 })
 const defaultProps = {
-  pageKey: 'page',
-  limitKey: 'limit',
+  pageNumKey: 'page',
+  pageSizeKey: 'limit',
   totalKey: 'count',
   dataKey: 'data',
   pageNumInit: 1,
@@ -149,7 +149,7 @@ const searchParams = computed(() => {
   const obj = {}
   props.searchConfig.forEach((item) => {
     let defaultValue = ''
-    if (item.type === 'checkboxGroup') {
+    if (typeof item.type==='string'&& getComponentName(item.type) === 'ElCheckboxGroup') {
       defaultValue = []
     }
     if (item.type === 'times') {
@@ -221,9 +221,7 @@ async function getList() {
   )
   try {
     const resData = await props.tableApi(params)
-    const dataList = await props.tableTransition(
-      resData[propsData.value.dataKey]
-    )
+    const dataList = await props.tableFileter(resData[propsData.value.dataKey])
     tableList.value = dataList || resData[propsData.value.dataKey]
     total.value = resData[propsData.value.totalKey] || 0
   } finally {
@@ -233,8 +231,8 @@ async function getList() {
 const getParams = computed(() => {
   const params = { ...queryParams.value }
   if (!props.noPage) {
-    params[propsData.value.pageKey] = page.pageNum
-    params[propsData.value.limitKey] = page.pageSize
+    params[propsData.value.pageNumKey] = page.pageNum
+    params[propsData.value.pageSizeKey] = page.pageSize
   }
   return params
 })

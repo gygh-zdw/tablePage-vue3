@@ -20,9 +20,7 @@ export default {
   }
 }
 function generateFormItem(item, { queryParams, $emit, $slots }) {
-  if (isVueComponent(item.type)) {
-    return createFormItem(item, h(item.type, getDomBind(queryParams, item, false, $emit), getSlotObj($slots, item.childSlot)))
-  }
+
   if (item.type === 'slot') {
     return createFormItem(item, getSlotObj($slots, item.slotName, queryParams))
   }
@@ -35,7 +33,7 @@ function generateFormItem(item, { queryParams, $emit, $slots }) {
       h(ElDatePicker, getDomBind(queryParams, endItem, true, $emit))
     ])
   }
-  const component = getComponent(item)
+  const component = isVueComponent(item.type) ? item.type : getComponent(item)
   return createFormItem(item, h(component, getDomBind(queryParams, item, component === ElDatePicker, $emit), getSlotObj($slots, item.childSlot, {}, true)))
 }
 function createFormItem(item, dom) {
