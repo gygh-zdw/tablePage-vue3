@@ -3,7 +3,11 @@
     <div v-if="!noTitle" class="TablePage-title">
       {{ props.title || routeTitle }}
     </div>
-    <el-form inline v-if="!props.noSearchModel">
+    <el-form
+      inline
+      v-if="!props.noSearchModel"
+      style="display: flex; flex-wrap: wrap"
+    >
       <selfForm
         :searchConfigList="props.searchConfig"
         v-model:queryParams="inputQueryParams"
@@ -25,8 +29,8 @@
         </template>
       </selfForm>
       <el-form-item>
-        <el-button @click="reset">重置</el-button>
-        <el-button type="primary" @click="searchData">查询</el-button>
+        <el-button @click="resetHandler">重置</el-button>
+        <el-button type="primary" @click="searchHandler">查询</el-button>
         <slot name="buttonModel"></slot>
       </el-form-item>
     </el-form>
@@ -75,7 +79,7 @@ import selfColumn from './selfColumn.js'
 import selfForm from './selfForm.js'
 import { useRoute } from 'vue-router'
 import { ElTable, ElButton, ElFormItem, ElForm, ElLoading } from 'element-plus'
-import 'element-plus/theme-chalk/src/index.scss'
+// import 'element-plus/theme-chalk/src/index.scss'
 const vLoading = ElLoading.directive
 const title = useRoute()?.meta?.title
 const routeTitle = ref(title)
@@ -88,6 +92,11 @@ const props = defineProps({
   loading: Boolean, // loading
   noSearchModel: Boolean, // 无表单搜索标识
   changeToSearch: Boolean, // 表单change事件是否触发搜索
+  searchOver: {
+    // 搜索完成触发
+    type: Function,
+    default: () => {},
+  },
   tableHeight: {
     // 表格高度
     type: [Number, String],
@@ -108,7 +117,7 @@ const props = defineProps({
     type: Function,
     default: (value) => value,
   },
-  reset: {
+  resetFun: {
     // 重置触发
     type: Function,
     default: () => {},
@@ -149,7 +158,10 @@ const searchParams = computed(() => {
   const obj = {}
   props.searchConfig.forEach((item) => {
     let defaultValue = ''
-    if (typeof item.type==='string'&& getComponentName(item.type) === 'ElCheckboxGroup') {
+    if (
+      typeof item.type === 'string' &&
+      getComponentName(item.type) === 'ElCheckboxGroup'
+    ) {
       defaultValue = []
     }
     if (item.type === 'times') {
@@ -187,7 +199,7 @@ const isInitPage = computed(
     page.pageNum === propsData.value.pageNumInit &&
     page.pageSize === propsData.value.pageSizeInit
 )
-function searchData() {
+function searchHandler() {
   const isInitPageNow = isInitPage.value
   setInputToQueryParams()
   page.pageNum = propsData.value.pageNumInit
@@ -200,13 +212,13 @@ function setInputToQueryParams() {
 function setQueryParamsToInput() {
   inputQueryParams.value = JSON.parse(JSON.stringify(queryParams.value))
 }
-async function reset() {
+async function resetHandler() {
   const isInitPageNow = isInitPage.value
   inputQueryParams.value = { ...searchParams.value }
   setInputToQueryParams()
   page.pageNum = propsData.value.pageNumInit
   page.pageSize = propsData.value.pageSizeInit
-  await props.reset()
+  await props.resetFun()
   isInitPageNow && getList()
 }
 const TableRef = ref(null)
@@ -220,10 +232,12 @@ async function getList() {
     JSON.parse(JSON.stringify(getParams.value))
   )
   try {
-    const resData = await props.tableApi(params)
-    const dataList = await props.tableFileter(resData[propsData.value.dataKey])
-    tableList.value = dataList || resData[propsData.value.dataKey]
-    total.value = resData[propsData.value.totalKey] || 0
+    const resData = await props.tableApi(params || getParams.value)
+    const { dataKey, totalKey } = propsData.value
+    const dataList = await props.tableFileter(resData[dataKey])
+    tableList.value = dataList || resData[dataKey]
+    total.value = resData[totalKey] || 0
+    props.searchOver()
   } finally {
     tableLoading.value = false
   }
@@ -242,11 +256,12 @@ onMounted(() => {
   getList()
 })
 function changeQueryParams() {
-  props.changeToSearch && searchData()
+  props.changeToSearch && searchHandler()
 }
 // eslint-disable-next-line no-undef
 defineExpose({
-  getList, // api接口-执行数据获取渲染
+  searchHandler, // 执行数据获取
+  resetHandler, // 执行重置逻辑
   queryParams, // 获取form对象
   inputQueryParams, // 获取inputForm对象
   getParams, // 获取参数
@@ -254,24 +269,22 @@ defineExpose({
   TableRef, // 获取tableRef对象
 })
 </script>
-<style lang="scss" scoped>
+<style scoped>
 .TablePage-title {
   display: flex;
   align-items: center;
   font-size: 16px;
-  // font-weight: bold;
   color: #545454;
   padding-bottom: 10px;
-
-  &::before {
-    content: '';
-    width: 4px;
-    height: 20px;
-    margin-right: 10px;
-    border-radius: 3px;
-    box-shadow: 1px 0px 1px 0px #6270ee;
-    background: #6270ee;
-  }
+}
+.TablePage-title::before {
+  content: '';
+  width: 4px;
+  height: 20px;
+  margin-right: 10px;
+  border-radius: 3px;
+  box-shadow: 1px 0px 1px 0px #6270ee;
+  background: #6270ee;
 }
 .TablePage-pagination {
   display: flex;

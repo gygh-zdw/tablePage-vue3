@@ -8,7 +8,7 @@ const defTmBindData = {
 }
 export function getBind(configItem, isTm) {
   const defBindData = {
-    placeholder: (configItem.type === 'input' ? '请输入' : '请选择') + configItem.label || '',
+    placeholder: configItem.label || '',
     clearable: true,
     style: 'width: 200px'
   }
@@ -67,7 +67,7 @@ export function isVueComponent(obj) {
   return (
     typeof obj === 'object' &&
     obj !== null &&
-    obj.render && // Vue 3的响应式标记
-    typeof obj.render === 'function' // 确保有渲染函数
+    (obj.render || obj.install) && // Vue 3的响应式标记
+    (typeof obj.render === 'function' || typeof obj.install === 'function') // 确保有渲染函数
   );
 }
