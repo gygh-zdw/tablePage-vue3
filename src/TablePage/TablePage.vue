@@ -53,8 +53,7 @@
               v-slot:[slotName]="scope"
               :key="slotName"
             >
-              <slot :name="slotName" v-bind="{ ...scope }" />
-              <!-- v-bind="{ ...rowScopeToRaw(scope) }" -->
+              <slot :name="slotName" v-bind="{ ...rowScopeToRaw(scope) }" />
             </template>
           </selfColumn>
         </slot>
@@ -73,7 +72,7 @@
 
 <script setup>
 import { ref, reactive, watch, onMounted, computed, toRaw } from 'vue'
-import { getSlotList, getComponentName } from './utils'
+import { getSlotList, getComponentName, rowScopeToRaw } from './utils'
 import Pagination from './Pagination.vue'
 import selfColumn from './selfColumn.js'
 import selfForm from './selfForm.js'

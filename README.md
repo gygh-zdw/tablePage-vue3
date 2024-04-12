@@ -65,7 +65,7 @@ npm i tablepage-vue3
 | tableApi                                  | [<font color=red>必填</font >]表格api【可异步】              | Function      | Promise.reject()       |
 | title                                     | 标题                                                         | String        | 当前route的meta?.title |
 | noTitle                                   | 无标题标识                                                   | Boolean       | -                      |
-| noPage                                    | 不分页标识                                                   | Boolean       | -                      |
+| noPage                                    | 不显示分页器标识                                                   | Boolean       | -                      |
 | noMountedGetData                          | onMounted 不获取数据标识 ，为true时不会默认调用api接口，需要外部触发getList，但是分页和搜索仍会调用接口 | Boolean       | -                      |
 | loading                                   | 外部loading传入，与内部loading为<或>的关系                   | Boolean       | -                      |
 | noSearchModel                             | 无表单搜索标识                                               | Boolean       | -                      |
