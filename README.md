@@ -1,12 +1,16 @@
 # 地址
 
-github：https://github.com/gygh-zdw/tablePage-vue3
+[github 地址](https://github.com/gygh-zdw/tablePage-vue3)
 
-npm: https://www.npmjs.com/package/tablepage-vue3
+[npm 地址](https://www.npmjs.com/package/tablepage-vue3)
 
-CSDN: https://blog.csdn.net/weixin_44599143/article/details/137580980
+[CSDN 地址](https://blog.csdn.net/weixin_44599143/article/details/137723609)
 
 
+# 赞赏
+
+<img src="https://tablepage-vue3.oss-cn-beijing.aliyuncs.com/%E5%BE%AE%E4%BF%A1.jpg" width="210px">
+<img src="https://tablepage-vue3.oss-cn-beijing.aliyuncs.com/%E6%94%AF%E4%BB%98%E5%AE%9D.jpg" width="210px">
 
 # 引入
 
@@ -54,9 +58,16 @@ npm i tablepage-vue3
 
 ![在这里插入图片描述](https://tablepage-vue3.oss-cn-beijing.aliyuncs.com/%E5%9F%BA%E7%A1%80%E9%A1%B5%E9%9D%A2%E5%B1%95%E7%A4%BA.jpg)
 
-# 
+# 全文档模拟接口的数据结构
 
-# TablePage-vue3 API汇总
+```JavaScript
+  const getMessageList = () => ({
+    total: 5,
+    data: new Array(5).fill({ name: '张三', phone: '13x-xxxx-xxxx' })
+  })
+```
+
+# TablePage-vue3 API 汇总
 
 ## 属性
 
@@ -794,3 +805,464 @@ String 类型传入type是较为常用的情景，主要是将element-UI组件�
 ![请添加图片描述](https://tablepage-vue3.oss-cn-beijing.aliyuncs.com/type-obj.jpg)
 
 ![请添加图片描述](https://tablepage-vue3.oss-cn-beijing.aliyuncs.com/type-obj2.jpg)
+
+# 列表项及分页器配置
+
+## 属性 tableHeight
+
+本属性与 elementUI-table 的 tableHeight 一致，所不同的是，本组件设置 tableHeight 默认值为 550
+
+## 属性 tableColumnList 与 插槽 default / 插槽 tableShow
+
+### 属性 tableColumnList
+
+本组件可以通过 tableColumnList 属性配置分页器，达到 dom 最简化的效果，同时本配置项支持嵌套多层级效果
+对于需要绑定到`ElTableColumn`标签上的属性，可以直接声明到对应对象内
+
+```html
+<template>
+  <TablePage :tableApi="getMessageList" :tableColumnList="tableColumnList" />
+</template>
+<script setup>
+  import TablePage from 'TablePage-vue3'
+  const getMessageList = () => ({
+    total: 5,
+    data: new Array(5).fill({ name: '张三', phone: '13x-xxxx-xxxx' }),
+  })
+  const tableColumnList = [
+    { type: 'index', label: '序号', width: '90' },
+    { prop: 'name', label: '姓名', minWidth: '90', showOverflowTooltip: true },
+    { prop: 'phone', label: '电话', minWidth: '90', showOverflowTooltip: true },
+  ]
+</script>
+```
+
+![请添加图片描述](https://tablepage-vue3.oss-cn-beijing.aliyuncs.com/tableColumnList.jpg)
+其效果等效于
+
+```html
+<template>
+  <TablePage :tableApi="getMessageList">
+    <template #default>
+      <el-table-column type="index" label="序号" align="center" width="90" />
+      <el-table-column
+        prop="name"
+        label="姓名"
+        align="center"
+        min-width="90"
+        show-overflow-tooltip
+      />
+      <el-table-column
+        prop="phone"
+        label="电话"
+        align="center"
+        min-width="90"
+        show-overflow-tooltip
+      />
+    </template>
+  </TablePage>
+</template>
+<script setup>
+  import TablePage from 'TablePage-vue3'
+  const getMessageList = () => ({
+    total: 5,
+    data: new Array(5).fill({ name: '张三', phone: '13x-xxxx-xxxx' }),
+  })
+</script>
+```
+
+#### 嵌套多层级 child
+
+当需要多层级表单时，可以使用 child 属性，其内部结构与 tableColumnList 一致，但是他将被包裹在父级的`ElTableColumn`里，以达成嵌套效果
+
+```html
+<template>
+  <TablePage :tableApi="getMessageList" :tableColumnList="tableColumnList" />
+</template>
+<script setup>
+  import TablePage from 'TablePage-vue3'
+  const getMessageList = () => ({
+    total: 5,
+    data: new Array(5).fill({ name: '张三', phone: '13x-xxxx-xxxx' }),
+  })
+  const tableColumnList = [
+    { type: 'index', label: '序号', width: '90' },
+    {
+      label: '用户信息',
+      child: [
+        {
+          prop: 'name',
+          label: '姓名',
+          minWidth: '90',
+          showOverflowTooltip: true,
+        },
+        {
+          prop: 'phone',
+          label: '电话',
+          minWidth: '90',
+          showOverflowTooltip: true,
+        },
+      ],
+    },
+    { prop: 'tm', label: '时间', minWidth: '180', showOverflowTooltip: true },
+  ]
+</script>
+```
+
+![请添加图片描述](https://tablepage-vue3.oss-cn-beijing.aliyuncs.com/tableColumnList-child.jpg)
+既等效于
+
+```html
+<template>
+  <TablePage :tableApi="getMessageList">
+    <template #default>
+      <el-table-column type="index" label="序号" align="center" width="90" />
+      <el-table-column label="用户" align="center">
+        <el-table-column
+          prop="name"
+          label="姓名"
+          align="center"
+          min-width="90"
+          show-overflow-tooltip
+        />
+        <el-table-column
+          prop="phone"
+          label="电话"
+          align="center"
+          min-width="90"
+          show-overflow-tooltip
+        />
+      </el-table-column>
+      <el-table-column
+        prop="tm"
+        label="时间"
+        align="center"
+        min-width="180"
+        show-overflow-tooltip
+      />
+    </template>
+  </TablePage>
+</template>
+<script setup>
+  import TablePage from 'TablePage-vue3'
+  const getMessageList = () => ({
+    total: 5,
+    data: new Array(5).fill({ name: '张三', phone: '13x-xxxx-xxxx' }),
+  })
+</script>
+```
+
+#### 插槽 slotName
+
+当某项需要使用插槽时，可以单独传入 slotName 声明插槽名，组件也将`ElTableColumn`传给 row 的相关字段传给该插槽
+
+```html
+<template>
+  <TablePage
+    border
+    :tableApi="getMessageList"
+    :tableColumnList="tableColumnList"
+  >
+    <template #columnSlot="{ row }"> {{ row }} </template>
+  </TablePage>
+</template>
+<script setup>
+  import TablePage from 'TablePage-vue3'
+  const getMessageList = () => ({
+    total: 5,
+    data: new Array(5)
+      .fill({ name: '张三', phone: '13x-xxxx-xxxx' })
+      .map((item, index) => ({ ...item, index })),
+  })
+  const tableColumnList = [
+    { type: 'index', label: '序号', width: '90' },
+    { prop: 'name', label: '姓名', minWidth: '90', showOverflowTooltip: true },
+    { slotName: 'columnSlot', label: '插槽', minWidth: '90' },
+  ]
+</script>
+```
+
+![请添加图片描述](https://tablepage-vue3.oss-cn-beijing.aliyuncs.com/tableColumnList-slotName.jpg)
+
+### 插槽 default / 插槽 tableShow
+
+插槽 default 与 插槽 tableShow 效果相同，可根据使用习惯使用
+
+### 优先级
+
+优先级为 `插槽 default ` > `插槽 tableShow`>`属性 tableColumnList`
+
+## 属性 noPage
+
+声明 noPage，将隐藏分页器，既无法分页
+
+```html
+<template>
+  <TablePage noPage :tableApi="getMessageList">
+    <template #default>
+      <el-table-column type="index" label="序号" align="center" width="90" />
+      <el-table-column
+        prop="name"
+        label="姓名"
+        align="center"
+        min-width="90"
+        show-overflow-tooltip
+      />
+      <el-table-column
+        prop="phone"
+        label="电话"
+        align="center"
+        min-width="90"
+        show-overflow-tooltip
+      />
+    </template>
+  </TablePage>
+</template>
+<script setup>
+  import TablePage from 'TablePage-vue3'
+  const getMessageList = () => ({
+    total: 5,
+    data: new Array(5).fill({
+      name: '张三',
+      phone: '13x-xxxx-xxxx',
+      tm: '2024-04-12',
+    }),
+  })
+</script>
+```
+
+![请添加图片描述](https://tablepage-vue3.oss-cn-beijing.aliyuncs.com/noPage.jpg)
+
+## 属性 paginationProps
+
+需要配置到分页器标签的相关属性，可以声明到 paginationProps 内，组件内部将获取相关属性
+
+```html
+<template>
+  <TablePage :tableApi="getMessageList" :paginationProps="paginationProps">
+    <template #default>
+      <el-table-column type="index" label="序号" align="center" width="90" />
+      <el-table-column
+        prop="name"
+        label="姓名"
+        align="center"
+        min-width="90"
+        show-overflow-tooltip
+      />
+      <el-table-column
+        prop="phone"
+        label="电话"
+        align="center"
+        min-width="90"
+        show-overflow-tooltip
+      />
+    </template>
+  </TablePage>
+</template>
+<script setup>
+  import TablePage from 'TablePage-vue3'
+  const getMessageList = () => ({
+    count: 100,
+    data: new Array(10).fill({
+      name: '张三',
+      phone: '13x-xxxx-xxxx',
+      tm: '2024-04-12',
+    }),
+  })
+  const paginationProps = {
+    background: true,
+    layout: 'prev, pager, total, next',
+  }
+</script>
+```
+
+![请添加图片描述](https://tablepage-vue3.oss-cn-beijing.aliyuncs.com/paginationProps.jpg)
+
+其底部分页渲染相当于
+
+```html
+<el-pagination
+  v-model:currentPage="currentPage"
+  v-model:page-size="pageSize"
+  :total="total"
+  layout="prev, pager, total, next"
+  :background="true"
+/>
+```
+
+## ElTable 的其他相关属性
+
+对于需要向`ElTable`写入的属性，可以直接写到本组件上，内部将穿透给 ElTable
+例：想要获得`<el-table row-class-name="rowClassName">`的效果，可以使用`<table-page-vue3 row-class-name="rowClassName" >`来实现
+对于想要触发`ElTable`的事件，可以获取本组件抛出的 tableRef 对象触发，例如想要触发`ElTable`的 setCurrentRow 方法
+可以` <TablePage ref="TablePageRef">`声明完 ref 对象后通过`TablePageRef.value.TableRef.setCurrentRow()`触发
+
+# props 配置
+
+## pageNumKey
+
+本字段作用于向 tableApi 发送数据时，页码字段
+默认值：page
+
+## pageSizeKey
+
+本字段作用于向 tableApi 发送数据时，单页数据量字段
+默认值：limit
+
+## totalKey
+
+本字段作用于接收 tableApi 返回数据时，获取数据总量字段
+默认值：count
+
+## dataKey
+
+本字段作用于接收 tableApi 返回数据时，获取列表数据字段
+默认值：data
+
+## pageNumInit
+
+本字段作用于初始化 page 页面为第几页
+默认值：1
+
+## pageSizeInit
+
+本字段作用于初始化 page 页面，每页数据量
+默认值：10
+
+## 总结
+
+对应关系可汇总为
+![请添加图片描述](https://tablepage-vue3.oss-cn-beijing.aliyuncs.com/props.jpg)
+
+# 其他配置项
+
+## title
+
+设置左上角的 title 文案，默认将会从路由配置中读取`meta.title`
+
+```javascript
+      {
+        path: 'message',
+        name: 'message',
+        meta: { title: '短信发送' },
+        component: () => import('@/views/Message/index.vue')
+      },
+```
+
+亦可自己手动配置
+
+```html
+<template>
+  <TablePage title="DIYtitle" :tableApi="getMessageList">
+    <template #default>
+      <el-table-column type="index" label="序号" align="center" width="90" />
+      <el-table-column
+        prop="name"
+        label="姓名"
+        align="center"
+        min-width="90"
+        show-overflow-tooltip
+      />
+      <el-table-column
+        prop="phone"
+        label="电话"
+        align="center"
+        min-width="90"
+        show-overflow-tooltip
+      />
+    </template>
+  </TablePage>
+</template>
+<script setup>
+  import TablePage from 'TablePage-vue3'
+  const getMessageList = () => ({
+    total: 5,
+    data: new Array(5).fill({ name: '张三', phone: '13x-xxxx-xxxx' }),
+  })
+</script>
+```
+
+![请添加图片描述](https://tablepage-vue3.oss-cn-beijing.aliyuncs.com/DIYTitle.jpg)
+
+## noTitle
+
+如果不想配置 title，可以声明 noTitle 取消显示
+
+```html
+<template>
+  <TablePage noTitle :tableApi="getMessageList">
+    <template #default>
+      <el-table-column type="index" label="序号" align="center" width="90" />
+      <el-table-column
+        prop="name"
+        label="姓名"
+        align="center"
+        min-width="90"
+        show-overflow-tooltip
+      />
+      <el-table-column
+        prop="phone"
+        label="电话"
+        align="center"
+        min-width="90"
+        show-overflow-tooltip
+      />
+    </template>
+  </TablePage>
+</template>
+<script setup>
+  import TablePage from 'TablePage-vue3'
+  const getMessageList = () => ({
+    total: 5,
+    data: new Array(5).fill({ name: '张三', phone: '13x-xxxx-xxxx' }),
+  })
+</script>
+```
+
+![请添加图片描述](https://tablepage-vue3.oss-cn-beijing.aliyuncs.com/noTitle.jpg)
+
+## noMountedGetData
+
+在部分业务场景中，你并不想在加载页面时立即调用接口，可以声明 noMountedGetData 属性为 true，此时组件内部将不会在 onMounted 获取数据，
+注意：此属性不会影响搜索、重置、页码切换时调用接口，尽管声明了 noMountedGetData 属性为 true，但搜索、重置、页码切换时组件仍然会请求接口
+
+## loading
+
+在一些业务情景下，可能想让 table 的 loading 因外部事件而显示，此时可以传入 loading，本属性接收 Boolean 类型，当为 true 时，列表页将会显示 loading，对于 loading 所需配置，亦可直接声明到组件上
+
+```html
+<template>
+  <TablePage
+    loading
+    element-loading-text="数据加载中..."
+    :tableApi="getMessageList"
+  >
+    <template #default>
+      <el-table-column type="index" label="序号" align="center" width="90" />
+      <el-table-column
+        prop="name"
+        label="姓名"
+        align="center"
+        min-width="90"
+        show-overflow-tooltip
+      />
+      <el-table-column
+        prop="phone"
+        label="电话"
+        align="center"
+        min-width="90"
+        show-overflow-tooltip
+      />
+    </template>
+  </TablePage>
+</template>
+<script setup>
+  import TablePage from 'TablePage-vue3'
+  const getMessageList = () => ({
+    total: 5,
+    data: new Array(5).fill({ name: '张三', phone: '13x-xxxx-xxxx' }),
+  })
+</script>
+```
+
+![请添加图片描述](https://tablepage-vue3.oss-cn-beijing.aliyuncs.com/loading.jpg)

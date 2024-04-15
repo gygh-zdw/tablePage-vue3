@@ -1,14 +1,22 @@
 {
   "name": "tablepage-vue3",
-  "version": "0.1.4",
+  "version": "1.0.0",
   "private": false,
   "author": "mr_zhu_dw",
   "keywords": [
     "vue3",
-    "TablePage",
     "element-plus",
     "搜索页",
-    "表单页"
+    "表单页",
+    "搜索表单页",
+    "table",
+    "search",
+    "adminPage",
+    "searchPage",
+    "TablePage",
+    "searchTablePage",
+    "TableSearchPage",
+    "web"
   ],
   "description": "基于vue3.0 对element-plus进行高度集成，便于列表页高效开发",
   "license": "ISC",
