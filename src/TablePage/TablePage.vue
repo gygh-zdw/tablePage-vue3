@@ -78,7 +78,7 @@ import selfColumn from './selfColumn.js'
 import selfForm from './selfForm.js'
 import { useRoute } from 'vue-router'
 import { ElTable, ElButton, ElFormItem, ElForm, ElLoading } from 'element-plus'
-// import 'element-plus/theme-chalk/src/index.scss'
+import 'element-plus/theme-chalk/src/index.scss'
 const vLoading = ElLoading.directive
 const title = useRoute()?.meta?.title
 const routeTitle = ref(title)

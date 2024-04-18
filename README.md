@@ -9,8 +9,7 @@
 
 # 赞赏
 
-<img src="https://tablepage-vue3.oss-cn-beijing.aliyuncs.com/%E5%BE%AE%E4%BF%A1.jpg" width="210px">
-<img src="https://tablepage-vue3.oss-cn-beijing.aliyuncs.com/%E6%94%AF%E4%BB%98%E5%AE%9D.jpg" width="210px">
+<img src="https://tablepage-vue3.oss-cn-beijing.aliyuncs.com/%E8%B5%9E%E8%B5%8F%E7%A0%81.jpg" width="210px">
 
 # 引入
 
